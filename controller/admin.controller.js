@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import moment from "moment-timezone";
-import { sendOtp } from "../utils/nodeMailer.js";
+import { sendOtp, mailRegister, chapwd } from "../utils/nodeMailer.js";
 
 const Register = async (req, res) => {
   try {
@@ -29,6 +29,7 @@ const Register = async (req, res) => {
         message: "Register successfully",
         sessionData: sessionData,
       });
+      mailRegister(name, email);
     } else {
       res.status(404).send({ message: "Admin already exists" });
     }
@@ -133,14 +134,24 @@ const ChangePasssword = async (req, res) => {
   // const { id } = req.params
   try {
     const { adminId, password, passwordConfirmation } = req.body;
-    if (password == passwordConfirmation) {
-      const salt = await bcrypt.genSalt(10);
-      const hash = await bcrypt.hash(password, salt);
-      const chpwd = await Admin.findOneAndUpdate(adminId, {
-        password: hash,
-      });
-      await chpwd.save();
-      res.status(200).send({ message: "Password changed successfully" });
+    const cnfrmOtpVerified = await Otp.findOne({ adminId });
+    if (cnfrmOtpVerified.expired_otp == true) {
+      if (password == passwordConfirmation) {
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+        const chpwd = await Admin.findOneAndUpdate(adminId, {
+          password: hash,
+        });
+        const Token = await Sessions.findOne({ adminId });
+        const { token } = Token;
+        await chpwd.save();
+        chapwd(cnfrmOtpVerified.email, "password changed successfully");
+        res
+          .status(200)
+          .send({ message: "Password changed successfully", token: token });
+      }
+    } else {
+      res.status(403).send({ message: "Not Authorized" });
     }
   } catch (error) {
     console.log(error);

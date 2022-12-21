@@ -2,7 +2,8 @@ import nodemailer from "nodemailer";
 var admin_email = process.env.ADMIN_MAIL;
 var password = process.env.ADMIN_MAIL_PASSWORD;
 
-export const mailRegister = (name, email, otp) => {
+// export const mailRegister = (name, email, otp) => {
+export const mailRegister = (name, email) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -397,7 +398,7 @@ export const mailRegister = (name, email, otp) => {
                                         <img
                                           alt="Banner"
                                           class="big"
-                                          src="https://images.unsplash.com/photo-1549247796-5d8f09e9034b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1758&q=80"
+                                          src="https://ik.imagekit.io/q4f02hrey/GraceLandBanner.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1671610505334"
                                           style="
                                             display: block;
                                             height: auto;
@@ -504,8 +505,8 @@ export const mailRegister = (name, email, otp) => {
                       title="Logo"
                       width="272"
                       /> -->
-                      <p>You have successfully created an account in freez Store.</p>
-                      <p style="font-weight: bolder;letter-spacing: .7rem;background-color: #8080803b; padding: 1rem;">${otp}</p>
+                      <p>You have successfully created an account in Graceland Journal App.</p>
+                      <p style="font-weight: bolder;letter-spacing: .7rem;background-color: #8080803b; padding: 1rem;"></p>
                     </div>
                     </td>
                   </tr>
@@ -753,7 +754,7 @@ export const mailRegister = (name, email, otp) => {
                                         "
                                       >
                                         <span class="tinyMce-placeholder"
-                                          >#Freez</span
+                                          >#Graceland Journals</span
                                         >
                                       </h3>
                                     </td>
@@ -875,7 +876,7 @@ export const mailRegister = (name, email, otp) => {
                                                 ><span style="color: #999999">
                                                   <br /></span></span
                                               ><span style="color: #999999"
-                                                >© 2022 Freez. All Rights
+                                                >© 2022-23 Graceland Journals. All Rights
                                                 Reserved.</span
                                               ></span
                                             >
@@ -1341,7 +1342,7 @@ export const sendOtp = (email, otp) => {
                                         <img
                                           alt="Banner"
                                           class="big"
-                                          src="https://images.unsplash.com/photo-1549247796-5d8f09e9034b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1758&q=80"
+                                          src="https://ik.imagekit.io/q4f02hrey/GraceLandBanner.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1671610505334"
                                           style="
                                             display: block;
                                             height: auto;
@@ -1598,10 +1599,7 @@ export const sendOtp = (email, otp) => {
                                             "
                                           >
                                             <span style="font-size: 16px"
-                                              >Lorem ipsum dolor sit amet,
-                                              consectetur adipiscing elit, sed do
-                                              eiusmod tempor incididunt ut labore et
-                                              dolore magna aliqua.</span
+                                              >This template page is used by SMSOTPDelivery as the content of the SMS that it sends to the user.</span
                                             >
                                           </p>
                                         </div>
@@ -1818,7 +1816,7 @@ export const sendOtp = (email, otp) => {
                                                 ><span style="color: #999999">
                                                   <br /></span></span
                                               ><span style="color: #999999"
-                                                >© 2022 Graceland Journals. All Rights
+                                                >© 2022-23 Graceland Journals. All Rights
                                                 Reserved.</span
                                               ></span
                                             >
@@ -1887,7 +1885,7 @@ export const sendOtp = (email, otp) => {
   });
 };
 
-export const chpwd = (email, body) => {
+export const chapwd = (email, content) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -2282,7 +2280,7 @@ export const chpwd = (email, body) => {
                                         <img
                                           alt="Banner"
                                           class="big"
-                                          src="https://images.unsplash.com/photo-1549247796-5d8f09e9034b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1758&q=80"
+                                         src="https://ik.imagekit.io/q4f02hrey/GraceLandBanner.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1671610505334"
                                           style="
                                             display: block;
                                             height: auto;
@@ -2389,7 +2387,7 @@ export const chpwd = (email, body) => {
                       title="Logo"
                       width="272"
                       /> -->
-                      <p style="font-weight: bolder;background-color: #8080803b;padding: 1rem;">${body}</p>
+                      <p style="font-weight: bolder;background-color: #8080803b;padding: 1rem;">${content}</p>
                     </div>
                     </td>
                   </tr>
@@ -2637,7 +2635,7 @@ export const chpwd = (email, body) => {
                                         "
                                       >
                                         <span class="tinyMce-placeholder"
-                                          >#Freez</span
+                                          >#Graceland Journals</span
                                         >
                                       </h3>
                                     </td>
@@ -2759,7 +2757,7 @@ export const chpwd = (email, body) => {
                                                 ><span style="color: #999999">
                                                   <br /></span></span
                                               ><span style="color: #999999"
-                                                >© 2022 Freez. All Rights
+                                                >© 2022-23 Graceland Journals. All Rights
                                                 Reserved.</span
                                               ></span
                                             >

@@ -7,8 +7,6 @@ import {
   ForgetPassword,
   Verify,
   ChangePasssword,
-  //   Verify,
-  //   Changepassword,
   //   Auth,
 } from "../controller/admin.controller.js";
 
