@@ -3,7 +3,7 @@ import express from "express";
 import {
   Register,
   Signin,
-  //   Logout,
+  Logout,
   ForgetPassword,
   Verify,
   ChangePasssword,
@@ -17,7 +17,7 @@ router.post("/signin", Signin);
 router.post("/forgetpassword", ForgetPassword);
 router.post("/verifyotp", Verify);
 router.post("/changepassword", ChangePasssword);
-// router.post("/logout", Logout);
+router.post("/logout", Logout);
 // router.post("/forgetpassword", ForgetPassword);
 // router.post("/verify-token", Verify);
 // router.patch("/changepassword/:id", Changepassword);

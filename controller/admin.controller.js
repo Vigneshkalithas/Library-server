@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import moment from "moment-timezone";
 import { sendOtp, mailRegister, chapwd } from "../utils/nodeMailer.js";
+import generateToken from "../utils/generateToken.js";
 
 const Register = async (req, res) => {
   try {
@@ -17,24 +18,21 @@ const Register = async (req, res) => {
       const hash = await bcrypt.hash(password, salt);
       const adminData = { name, email, password: hash };
       const admin = new Admin(adminData);
-
-      const token = jwt.sign(
-        { _id: admin._id + Date.now() },
-        process.env.JWT_SECRET
-      );
+      const token = generateToken({ _id: admin._id });
       const sessionData = new Sessions({ adminId: admin._id, token });
       await admin.save();
       await sessionData.save();
       res.status(200).send({
+        error: false,
         message: "Register successfully",
         sessionData: sessionData,
       });
-      mailRegister(name, email);
+      // mailRegister(name, email);
     } else {
-      res.status(404).send({ message: "Admin already exists" });
+      res.status(404).send({ error: true, message: "Admin already exists" });
     }
   } catch (error) {
-    res.status(404).send({ message: "Something went wrong" });
+    res.status(404).send({ error: true, message: "Something went wrong" });
   }
 };
 
@@ -47,16 +45,15 @@ const Signin = async (req, res) => {
       res.status(404).send({ message: "Invalid Credentials" });
     } else {
       bcrypt.compare(password, admin.password, async (error, result) => {
-        if (!result) res.status(401).send({ message: "Invalid Credential" });
+        if (!result)
+          res.status(401).send({ error: true, message: "Invalid Credential" });
         if (result) {
-          const token = jwt.sign(
-            { _id: admin.id + Date.now() },
-            process.env.JWT_SECRET
-          );
+          const token = generateToken({ _id: admin._id });
           const sessionData = new Sessions({ adminId: admin._id, token });
           await admin.save();
           await sessionData.save();
           res.status(200).json({
+            error: false,
             message: "Admin logged in successfully",
             sessionData,
           });
@@ -64,7 +61,9 @@ const Signin = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(404).send({ message: "Sorry something went wrong" });
+    res
+      .status(404)
+      .send({ error: true, message: "Sorry something went wrong" });
     console.log(error);
   }
 };
@@ -86,13 +85,15 @@ const ForgetPassword = async (req, res) => {
       const otpData = { name, email, adminId, otp, expire_time };
       const OTp = new Otp(otpData);
       await OTp.save();
-      sendOtp(email, otp);
-      res.status(200).send({ message: "Otp Send Succesfully" });
+      // sendOtp(email, otp);
+      res.status(200).send({ error: false, message: "Otp Send Succesfully" });
     } else {
-      res.status(404).send({ message: "Admin not exists" });
+      res.status(404).send({ error: true, message: "Admin not exists" });
     }
   } catch (error) {
-    res.status(404).send({ message: "sorry something went wrong" });
+    res
+      .status(404)
+      .send({ error: true, message: "sorry something went wrong" });
     console.log(error);
   }
 };
@@ -115,18 +116,24 @@ const Verify = async (req, res) => {
         });
         await oTpExpiration.save();
 
-        res
-          .status(200)
-          .json({ message: "Otp verified successfully", adminId: adminId });
+        res.status(200).json({
+          error: false,
+          message: "Otp verified successfully",
+          adminId: adminId,
+        });
       } else {
-        res.status(404).send({ message: "Sorry your otp incorrect" });
+        res
+          .status(404)
+          .send({ error: true, message: "Sorry your otp incorrect" });
       }
     } else {
-      res.status(404).send({ message: "Sorry your otp expired" });
+      res.status(404).send({ error: true, message: "Sorry your otp expired" });
     }
   } catch (error) {
     console.log(error);
-    res.status(404).send({ message: "sorry your otp is incorrect" });
+    res
+      .status(404)
+      .send({ error: true, message: "sorry your otp is incorrect" });
   }
 };
 
@@ -145,18 +152,39 @@ const ChangePasssword = async (req, res) => {
         const Token = await Sessions.findOne({ adminId });
         const { token } = Token;
         await chpwd.save();
-        chapwd(cnfrmOtpVerified.email, "password changed successfully");
-        res
-          .status(200)
-          .send({ message: "Password changed successfully", token: token });
+        // chapwd(cnfrmOtpVerified.email, "password changed successfully");
+        res.status(200).send({
+          error: false,
+          message: "Password changed successfully",
+          token: token,
+        });
       }
     } else {
-      res.status(403).send({ message: "Not Authorized" });
+      res.status(404).send({ error: true, message: "Not Authorized" });
     }
   } catch (error) {
     console.log(error);
-    res.status(404).send({ message: "Sorry  something went wrong" });
+    res
+      .status(404)
+      .send({ error: true, message: "Sorry  something went wrong" });
   }
 };
 
-export { Register, Signin, ForgetPassword, Verify, ChangePasssword };
+const Logout = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const expireCheck = await Sessions.findOneAndUpdate(
+      { token },
+      { expired: true }
+    );
+    await expireCheck.save();
+    res.status(200).send({ error: false, message: "logout succesfully" });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(404)
+      .send({ error: true, message: "sorry something went wrong" });
+  }
+};
+
+export { Register, Signin, ForgetPassword, Verify, ChangePasssword, Logout };
