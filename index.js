@@ -2,8 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import nodemailer from "nodemailer";
-import adminRoutes from "./routes/admin.router.js";
+import userRoutes from "./routes/user.router.js";
 import moment from "moment-timezone";
+import bookRoutes from "./routes/book.router.js";
 
 import connectDB from "./config/db.js";
 
@@ -13,10 +14,11 @@ dotenv.config();
 app.use(express.json());
 app.use(cors());
 
-app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
+app.use("/books", bookRoutes);
 
 app.get("/", (req, res) => {
-  res.json({ msg: "Hello from Graceland Server" });
+  res.json({ msg: "Hello from Library Server" });
 });
 
 // app.listen(process.env.PORT || 5000, () => {

@@ -12,7 +12,7 @@ const otpSchema = mongoose.Schema(
       required: true,
     },
 
-    adminId: {
+    userId: {
       type: String,
     },
     otp: {

@@ -7,21 +7,23 @@ import {
   ForgetPassword,
   Verify,
   ChangePasssword,
-  //   Auth,
-} from "../controller/admin.controller.js";
+  UserDeatails,
+  AllStudents,
+  SingleUser,
+  SingleAdmin,
+} from "../controller/user.controller.js";
 
 const router = express.Router();
-//      /admin
+//      /admin/userdetails
 router.post("/register", Register);
 router.post("/signin", Signin);
 router.post("/forgetpassword", ForgetPassword);
 router.post("/verifyotp", Verify);
 router.post("/changepassword", ChangePasssword);
 router.post("/logout", Logout);
-// router.post("/forgetpassword", ForgetPassword);
-// router.post("/verify-token", Verify);
-// router.patch("/changepassword/:id", Changepassword);
-// router.post("/auth", Auth);
-// router.get("/getUsers", getUsers);
+router.post("/userdetails", UserDeatails);
+router.get("/allstudents", AllStudents);
+router.post("/singleuserdetail/:id", SingleUser);
+router.post("/singleadmindetail/:id", SingleAdmin);
 
 export default router;
