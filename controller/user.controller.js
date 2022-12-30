@@ -31,7 +31,7 @@ const Register = async (req, res) => {
         message: "Register successfully",
         sessionData: sessionData,
       });
-      // mailRegister(name, email);
+      mailRegister(name, email);
     } else {
       res.status(404).send({ error: true, message: "User already exists" });
     }
@@ -40,7 +40,6 @@ const Register = async (req, res) => {
   }
 };
 
-// reg api works fine
 const Signin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -75,8 +74,6 @@ const Signin = async (req, res) => {
   }
 };
 
-// sign api works fine
-
 const ForgetPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -92,7 +89,7 @@ const ForgetPassword = async (req, res) => {
       const otpData = { name, email, userId, otp, expire_time };
       const OTp = new Otp(otpData);
       await OTp.save();
-      // sendOtp(email, otp);
+      sendOtp(email, otp);
       res.status(200).send({ error: false, message: "Otp Send Succesfully" });
     } else {
       res.status(404).send({ error: true, message: "User not exists" });
@@ -158,7 +155,7 @@ const ChangePasssword = async (req, res) => {
         const Token = await Sessions.findOne({ userId });
         const { token } = Token;
         await chpwd.save();
-        // changePassword(cnfrmOtpVerified.email, "password changed successfully");
+        changePassword(cnfrmOtpVerified.email, "password changed successfully");
 
         res.status(200).send({
           error: false,
